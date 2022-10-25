@@ -4,7 +4,7 @@ from pyzbar.pyzbar import decode
 from PIL import Image
 
 def imageCapture():                     #captures the frames from the video streaming
-    vid = cv2.VideoCapture(1)           #set as 0 for integrated webcam 1 for USB webcam
+    vid = cv2.VideoCapture(0)           #set as 0 for integrated webcam 1 for USB webcam
     while True:
         ret, frame = vid.read()
         barcodeDecoder(frame)
