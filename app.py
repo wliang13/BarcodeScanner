@@ -30,5 +30,30 @@ def index():
         rows = Todo.query.order_by(Todo.date_created).all()
         return render_template('index.html', rows=rows)
 
+@app.route('/delete/<int:id>')
+def delete(id):
+    delete_row = Todo.query.get_or_404(id)
+
+    try:
+        db.session.delete(delete_row)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return 
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    row = Todo.query.get_or_404(id)
+    if request.method == 'POST':
+        row.content = request.form['content']
+
+        try:
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 
+    else:
+        return render_template('update.html', row=row)
+
 if __name__ == "__main__":
     app.run(debug=True)

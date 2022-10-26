@@ -7,6 +7,9 @@
 {% block body %}
 <div class="content">
     <h1 style="text-align: center">Update Row</h1>
-
+    <form action="/update/{{row.id}}" method="POST">
+        <input type="text" name="content" value="{{row.content}}">
+        <input type="submit" value="Update Row">
+    </form>
 </div>
 {% endblock %}
