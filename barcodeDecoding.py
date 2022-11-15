@@ -8,10 +8,14 @@ def imageCapture():                     #captures the frames from the video stre
     while True:
         ret, frame = vid.read()
         barcodeDecoder(frame)
-        cv2.imshow('Image', frame)
-        code = cv2.waitKey(10)
-        if code == ord('q'):
-            break
+        ret2, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        #cv2.imshow('Image', frame)
+        #code = cv2.waitKey(10)
+        #if code == ord('q'):
+        #    break
 
 def barcodeDecoder(image):
 
@@ -23,8 +27,8 @@ def barcodeDecoder(image):
         cv2.rectangle(image, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
 
         #if obj.data!="":
-        print(obj.data)
-        print(obj.type)
+        #print(obj.data)
+        #print(obj.type)
 
 imageCapture()
 #image = "barcode2.jpg"
