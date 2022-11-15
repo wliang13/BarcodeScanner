@@ -1,10 +1,34 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from pyzbar.pyzbar import decode
+import cv2
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
+
+camera = cv2.VideoCapture(0)
+
+def barcodeDecoder(image):
+    barcodes = decode(image)            #decode function from pyzbar that decodes barcodes
+    for obj in barcodes:
+        (x, y, w, h) = obj.rect         #locating barcode in image
+        #creating a rectangle around the barcode
+        cv2.rectangle(image, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
+
+def gen_frames():  
+    while True:
+        success, frame = camera.read()  # read the camera frame
+        barcodeDecoder(frame)           #decode function that decodes the barcode
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
