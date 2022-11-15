@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, Response
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from pyzbar.pyzbar import decode
@@ -29,6 +29,7 @@ def gen_frames():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
+
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,6 +79,14 @@ def update(id):
             return 
     else:
         return render_template('update.html', row=row)
+
+@app.route('/video_page')
+def video_page():
+   return render_template('videoPage.html')
+
+@app.route('/video_feed')   
+def video_feed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
     app.run(debug=True)
