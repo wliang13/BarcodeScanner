@@ -3,9 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from pyzbar.pyzbar import decode
 import cv2
+import winsound 
 
 
-app = Flask(__name__)
+
+app = Flask(__name__) #Flask dependency
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
@@ -23,12 +25,26 @@ def gen_frames():
         success, frame = camera.read()  # read the camera frame
         barcodeDecoder(frame)           #decode function that decodes the barcode
         if not success:
+
+            # need to find a check to call unsuccesful sound que when barcode is damaged and unable to be properly scanned
+        #sFreqUnsuccess = 400  # succes sound frequency
+        #sdurUnsuccess = 500 # success sound duration
+
+        #winsound.Beep(sFreqSuccess,sdurationSuccess)   #Play audio Que
             break
         else:
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
+
+    #Print success to operator webpage
+
+    sFreqSuccess = 1000  # succes sound frequency
+    sDurSuccess = 500 # success sound duration
+
+    winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
+     
 
 
 class Todo(db.Model):
