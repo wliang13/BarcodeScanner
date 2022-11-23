@@ -11,6 +11,8 @@ app = Flask(__name__) #Flask dependency
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
+barcodeList = []                        #list of decoded barcodes
+
 camera = cv2.VideoCapture(0)
 
 def barcodeDecoder(image):
@@ -19,6 +21,10 @@ def barcodeDecoder(image):
         (x, y, w, h) = obj.rect         #locating barcode in image
         #creating a rectangle around the barcode
         cv2.rectangle(image, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
+
+        #adding barcode values to the list
+        if obj.data not in barcodeList:
+            barcodeList.append(obj.data)    
 
 def gen_frames():  
     while True:
