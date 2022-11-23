@@ -106,3 +106,7 @@ def video_feed():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+#releasing everything at the end
+camera.release()
+cv2.destroyAllWindows()
