@@ -12,9 +12,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
 barcodeList = []                        #list of decoded barcodes
-
+temp=0
 camera = cv2.VideoCapture(0)
 
+"""
 def barcodeDecoder(image):
     barcodes = decode(image)            #decode function from pyzbar that decodes barcodes
     for obj in barcodes:
@@ -24,12 +25,31 @@ def barcodeDecoder(image):
 
         #adding barcode values to the list
         if obj.data not in barcodeList:
-            barcodeList.append(obj.data)    
+            #might no need list, might just need to add to database
+            barcodeList.append(obj.data)
+            temp = obj.data    
+            #print(temp)
+            
+"""
 
 def gen_frames():  
     while True:
         success, frame = camera.read()  # read the camera frame
-        barcodeDecoder(frame)           #decode function that decodes the barcode
+        barcodes = decode(frame)
+        for obj in barcodes:
+            (x, y, w, h) = obj.rect         #locating barcode in image
+            #creating a rectangle around the barcode
+            cv2.rectangle(frame, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
+
+            
+            if obj.data not in barcodeList:
+                #might not need list, might just need to add to database
+                barcodeList.append(obj.data)
+            #    temp = obj.data  
+            #    #yield obj.data  
+            #    #print(temp)
+
+
         if not success:
 
             # need to find a check to call unsuccesful sound que when barcode is damaged and unable to be properly scanned
@@ -43,6 +63,7 @@ def gen_frames():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
+        
 
     #Print success to operator webpage
 
@@ -50,12 +71,12 @@ def gen_frames():
     sDurSuccess = 500 # success sound duration
 
     winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
-     
 
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
+    #barcode = db.Column(db.string(200))         #barcodes stored in database
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -104,11 +125,15 @@ def update(id):
 
 @app.route('/video_page')
 def video_page():
-   return render_template('videoPage.html')
+
+    #temp = barcodeList[-1]          #gets the last added barcode
+    return render_template('videoPage.html', temp=temp)
 
 @app.route('/video_feed')   
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
