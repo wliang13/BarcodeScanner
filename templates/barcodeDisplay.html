@@ -1,0 +1,13 @@
+<body>
+    {% if temp==0 %}
+        <p>No Scanned Barcodes</p>
+    {% else %}
+        {% for barcode in barcodeList %}
+            {{ barcode }}
+        {% endfor %}
+    {% endif %}
+</body>
+
+<a href="/video_page">
+<button> Back </button>
+</a>
