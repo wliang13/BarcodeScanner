@@ -45,6 +45,8 @@ def gen_frames():
             if obj.data not in barcodeList:
                 #might not need list, might just need to add to database
                 barcodeList.append(obj.data)
+                global temp
+                temp = 1
             #    temp = obj.data  
             #    #yield obj.data  
             #    #print(temp)
@@ -132,6 +134,15 @@ def video_page():
 @app.route('/video_feed')   
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/show_barcode')
+def show_barcode():
+    if temp == 0:
+        return render_template('barcodeDisplay.html', temp=temp)
+    else:
+        for x in barcodeList:
+            print(x)
+        return render_template('barcodeDisplay.html', barcodeList=barcodeList, temp=temp)
 
 
 
