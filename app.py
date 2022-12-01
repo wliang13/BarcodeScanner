@@ -127,7 +127,7 @@ def update(id):
 def video_page():
 
     #temp = barcodeList[-1]          #gets the last added barcode
-    return render_template('videoPage.html', temp=temp)
+    return render_template('videoPage.html')
 
 @app.route('/video_feed')   
 def video_feed():
