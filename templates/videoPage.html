@@ -3,8 +3,24 @@
         <div class="row">
             <div class="col-lg-8  offset-lg-2">
                 <h3 class="mt-5">Live Streaming</h3>
-                <img src="{{ url_for('video_feed') }}" width="75%">
+                <img src="{{ url_for('video_feed') }}" width="50%">
             </div>
         </div>
     </div>
 </body>
+
+<a href="/show_barcode">
+    <button>Barcode List</button>
+</a>
+
+<!--<body>
+    <div class="barcode">
+        <h1 style="text-align: left"> Barcodes Scanned </h1>
+        <body>
+            {% for barcode in result %}
+                {{ barcode }}
+            {% endfor %}
+            <p> {{ result }} </p>
+        </body>
+    </div>
+</body>-->
