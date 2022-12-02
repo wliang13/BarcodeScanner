@@ -12,6 +12,19 @@
 <a href="/show_barcode">
     <button>Barcode List</button>
 </a>
+<button onclick="playVid()" type="button">Play Video</button>
+<button onclick="pauseVid()" type="button">Pause Video</button><br> 
+<script> 
+    var vid = document.getElementById("video_feed"); 
+    
+    function playVid() { 
+      vid.play(); 
+    } 
+    
+    function pauseVid() { 
+      vid.pause(); 
+    } 
+    </script> 
 
 <!--<body>
     <div class="barcode">
