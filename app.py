@@ -40,11 +40,16 @@ def gen_frames():
             (x, y, w, h) = obj.rect         #locating barcode in image
             #creating a rectangle around the barcode
             cv2.rectangle(frame, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
+            string = "Barcode Scanned"
+            cv2.putText(frame, string, (x-20, y-20), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 2)
 
             
             if obj.data not in barcodeList:
                 #might not need list, might just need to add to database
                 barcodeList.append(obj.data)
+                sFreqSuccess = 1000  # succes sound frequency
+                sDurSuccess = 500 # success sound duration
+                winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
                 global temp
                 temp = 1
             #    temp = obj.data  
@@ -135,13 +140,13 @@ def video_page():
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+#Myabe use this function for showing the barcode in index.html
 @app.route('/show_barcode')
 def show_barcode():
     if temp == 0:
         return render_template('barcodeDisplay.html', temp=temp)
     else:
-        for x in barcodeList:
-            print(x)
         return render_template('barcodeDisplay.html', barcodeList=barcodeList, temp=temp)
 
 
