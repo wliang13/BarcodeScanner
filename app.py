@@ -75,6 +75,7 @@ def gen_frames():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
+    camera.release()
         
 
 
@@ -167,7 +168,3 @@ def start_camera():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-#releasing everything at the end
-#camera.release()
-#cv2.destroyAllWindows()
