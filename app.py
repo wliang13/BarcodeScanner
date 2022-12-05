@@ -47,7 +47,8 @@ def gen_frames():
             cv2.rectangle(frame, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
             string = "Barcode Scanned"
             cv2.putText(frame, string, (x-20, y-20), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 2)
-
+            #the next line is for showing the barcode data that is being scanned on the video feed
+            #cv2.putText(frame, obj.data, (x-20, y-20), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 2)
             
             if obj.data not in barcodeList:
                 #might not need list, might just need to add to database
