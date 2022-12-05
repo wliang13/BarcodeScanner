@@ -1,3 +1,39 @@
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('a#test').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/stop_camera',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+        $(function() {
+          $('a#test2').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/start_camera',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>-->
+<!--<div class='container'>
+    <h3>Stop</h3>
+        <form>
+            <a href=# id=test><button class='btn btn-default'>Test</button></a>
+        </form>
+    <h3>Start</h3>
+        <form>
+            <a href=# id=test2><button class='btn btn-default'>Test</button></a>
+        </form>
+
+</div>-->
+
+
 <body>
     <div class="container">
         <div class="row">
@@ -12,7 +48,16 @@
 <a href="/show_barcode">
     <button>Barcode List</button>
 </a>
-<button onclick="playVid()" type="button">Play Video</button>
+
+
+<a href="/stop_camera">
+    <button>Stop camera</button>
+</a>
+<a href="/start_camera">
+    <button>Start camera</button>
+</a>
+
+<!--<button onclick="playVid()" type="button">Play Video</button>
 <button onclick="pauseVid()" type="button">Pause Video</button><br> 
 <script> 
     var vid = document.getElementById("video_feed"); 
@@ -24,7 +69,7 @@
     function pauseVid() { 
       vid.pause(); 
     } 
-    </script> 
+    </script> -->
 
 <!--<body>
     <div class="barcode">
