@@ -62,14 +62,7 @@ def gen_frames():
             #    #yield obj.data  
             #    #print(temp)
 
-
         if not success:
-
-            # need to find a check to call unsuccesful sound que when barcode is damaged and unable to be properly scanned
-        #sFreqUnsuccess = 400  # succes sound frequency
-        #sdurUnsuccess = 500 # success sound duration
-
-        #winsound.Beep(sFreqSuccess,sdurationSuccess)   #Play audio Que
             break
         else:
             ret, buffer = cv2.imencode('.jpg', frame)
@@ -132,8 +125,6 @@ def update(id):
 
 @app.route('/video_page')
 def video_page():
-
-    #temp = barcodeList[-1]          #gets the last added barcode
     return render_template('videoPage.html')
 
 @app.route('/video_feed')   
