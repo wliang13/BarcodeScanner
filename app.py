@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, render_template, request, redirect, Response, send_file
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from pyzbar.pyzbar import decode
@@ -13,7 +13,8 @@ db = SQLAlchemy(app)
 
 barcodeList = []                        #list of decoded barcodes
 temp=0
-camera = cv2.VideoCapture(0)
+#camera = cv2.VideoCapture(0)
+cameraCaptureVar=0
 
 """
 def barcodeDecoder(image):
@@ -33,6 +34,10 @@ def barcodeDecoder(image):
 """
 
 def gen_frames():  
+    if cameraCaptureVar == 0:
+        camera = cv2.VideoCapture(0)
+    else:
+        return 0
     while True:
         success, frame = camera.read()  # read the camera frame
         barcodes = decode(frame)
@@ -71,13 +76,6 @@ def gen_frames():
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') 
         
-
-    #Print success to operator webpage
-
-    sFreqSuccess = 1000  # succes sound frequency
-    sDurSuccess = 500 # success sound duration
-
-    winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
 
 
 class Todo(db.Model):
@@ -138,7 +136,11 @@ def video_page():
 
 @app.route('/video_feed')   
 def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    if cameraCaptureVar==1:
+        filename = 'novideo.jpg'
+        return  send_file(filename, mimetype='image/jpg')
+    else:
+        return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 #Myabe use this function for showing the barcode in index.html
@@ -149,11 +151,23 @@ def show_barcode():
     else:
         return render_template('barcodeDisplay.html', barcodeList=barcodeList, temp=temp)
 
+@app.route('/stop_camera')
+def stop_camera():
+    global cameraCaptureVar
+    cameraCaptureVar=1
+    return render_template('videoPage.html')
+
+@app.route('/start_camera')
+def start_camera():
+    global cameraCaptureVar
+    cameraCaptureVar = 0
+    return render_template('videoPage.html')
+
 
 
 if __name__ == "__main__":
     app.run(debug=True)
 
 #releasing everything at the end
-camera.release()
-cv2.destroyAllWindows()
+#camera.release()
+#cv2.destroyAllWindows()
