@@ -53,10 +53,11 @@ def gen_frames():
             if obj.data not in barcodeList:
                 #might not need list, might just need to add to database
                 barcodeList.append(obj.data)
+
                 sFreqSuccess = 1000  # succes sound frequency
                 sDurSuccess = 500 # success sound duration
                 winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
-                global temp
+                global temp         #for showing barcode in third page
                 temp = 1
             #    temp = obj.data  
             #    #yield obj.data  
