@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: left">Enter Row</h1>
+    {% if rows|length < 1 %}
+    <h4 style="text-align: center"> There are no rows. Add row below.</h4>
+    {% else %}
+
+    <div>
+      <table align="center"><tr><td>
+
+        <table>
+            <tr>
+                <th>Row</th>
+                <th>Added</th>
+                <th>Actions</th>
+                <!--<th>Barcodes</th>-->
+            </tr>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row.content }}</td>
+                    <td>{{ row.date_created.date() }}</td>
+                    <td>
+                        <a href="/delete/{{row.id}}">Delete</a>
+                        <br>
+                        <a href="/update/{{row.id}}">Update</a>
+                    </td>
+                    <!--<td>{{ row.barcode }}</td>-->
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        </td><td>
+
+        <table>
+            <tr>
+                <th>Barcodes</th>
+            </tr>
+            {% for barcode in barcodeList %}
+                <tr>
+                    <td>{{ barcode }}</td>
+                </tr>
+        </table>
+        {% endfor %}
+      </div>
+      </td></tr></table>
+    <form action="/" method="POST">
+        <input type="text" name="content">
+        <input type="submit" value="Add Row">
+    </form>
+  </div>
+
+<a href="/video_page">
+    <button>Submit</button>
+</a>
+
+{% endblock %}
