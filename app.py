@@ -97,7 +97,7 @@ def index():
             return
     else:
         rows = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index.html', rows=rows)
+        return render_template('index.html', rows=rows, barcodeList=barcodeList)
 
 @app.route('/delete/<int:id>')
 def delete(id):
