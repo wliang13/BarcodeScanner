@@ -5,7 +5,7 @@ body, html {
 
 .content {
     margin: 0 auto;
-    width: 400px;
+    width: 600px;
 }
 
 table, td, th {
@@ -14,7 +14,8 @@ table, td, th {
 
 table {
     border-collapse: collapse;
-    width: 100%;
+    width: 70%;
+    float: left
 }
 
 th {

@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 # USAGE
-# Add to the app.py, 'from Exel_Exporter import exportExcelSheet'.
+# Add to the app.py, 'from Excel_Exporter import exportExcelSheet'.
 # Function takes in 2D enumerator lists, check headers to see in what order.
 # You will need xlsxwriter.py in your interpreter to compile.
 #
