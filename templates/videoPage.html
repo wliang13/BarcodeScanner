@@ -32,7 +32,7 @@
         </form>
 
 </div>-->
-<style>
+<!--<style>
     h3{
         margin-left: 275px;
 
@@ -43,32 +43,44 @@
         font-size: 20px;
         margin:4px 30px;
     }
-</style>
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+    }
+    .divcenter {
+        margin: auto;
+        width: 60%;
+    }
+</style>-->
 
 <body>
     <div class="container">
         <div class="row">
             <div class="col-lg-8  offset-lg-2">
-                <h3 class="mt-5">Live Streaming</h3>
-                <img src="{{ url_for('video_feed') }}" width="50%">
+                <h3 class="mt-5">Live Streaming</h3>            <!--style="text-align: center"-->
+                <img src="{{ url_for('video_feed') }}" class="center", width="50%">
             </div>
         </div>
     </div>
 </body>
 
-<a href="/show_barcode">
-    <button>Barcode List</button>
-</a>
-<a href="/start_camera">
-    <button style="color:green">Start camera</button>
-</a>
+<div class=".divcenter">
+    <!--<a href="/show_barcode">
+        <button>Barcode List</button>
+    </a>-->
+    <a href="/start_camera">
+        <button style="color:green">Start camera</button>
+    </a>
 
-<a href="/stop_camera">
-    <button style="color:red">Stop camera</button>
-</a>
-<a href="/">
-    <button style="color:blue">Back</button>
-</a>
+    <a href="/stop_camera">
+        <button style="color:red">Stop camera</button>
+    </a>
+    <a href="/">
+        <button style="color:blue">Back</button>
+    </a>
+</div>
 
 <!--<button onclick="playVid()" type="button">Play Video</button>
 <button onclick="pauseVid()" type="button">Pause Video</button><br> 
