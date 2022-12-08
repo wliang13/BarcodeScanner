@@ -102,7 +102,7 @@ def index():
             return
     else:
         rows = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index2.html', rows=rows, barcodeList=barcodeList)
+        return render_template('index3.html', rows=rows, barcodeList=barcodeList)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -169,7 +169,7 @@ def export():
     #print(dexport)
     exportExcelSheet(rowList, barcodeList)
     rows = Todo.query.order_by(Todo.date_created).all()
-    return render_template('index2.html', rows=rows, barcodeList=barcodeList)
+    return render_template('index3.html', rows=rows, barcodeList=barcodeList)
 
 
 
