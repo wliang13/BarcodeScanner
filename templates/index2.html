@@ -66,13 +66,18 @@
                         <th>Barcodes</th>
                     </tr>
                     {% for barcode in barcodeList %}
-                        <tr>
+                        <tr style="padding: 5px">
                             <td>{{ barcode }}</td>
                         </tr>
                     {% endfor %}
                 </table>
             </div>
+    </div>    
 </body>
+
+<a href="/export" type="none">
+    &ensp;<button>export</button>
+</a>
 
     <!--<form action="/" method="POST" style="margin: 0 auto">
         &ensp;<input type="text" name="content">
