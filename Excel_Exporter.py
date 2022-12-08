@@ -11,7 +11,7 @@ from datetime import datetime
 # Add button on html to just do this function.
 # Find everything the barcode exports and add to headers here.
 
-def exportExcelSheet(elData):
+def exportExcelSheet(rowList, barcodeList):
     # Creates the xlsx file and dates it
     sTime = datetime.now().strftime("%H-%M-%S_-""_%m-%d-%Y")
     sDocumentName = 'BarcodeIndex-_' + sTime + '_.xlsx'
@@ -22,9 +22,9 @@ def exportExcelSheet(elData):
     bold = xlsxWorkbook.add_format({'bold': True})
 
     # Header Goes Data Here If more is needed, this uses Row-Column as string in first argument.
-    xlsxWorksheet.write('A1', 'Code', bold)
-    xlsxWorksheet.write('B1', 'Item', bold)
-    xlsxWorksheet.write('C1', 'Exp. D', bold)
+    xlsxWorksheet.write('A1', 'Row', bold)
+    xlsxWorksheet.write('B1', 'Barcode', bold)
+    #xlsxWorksheet.write('C1', 'Exp. D', bold)
 
     """
     # Test Input
@@ -36,13 +36,28 @@ def exportExcelSheet(elData):
     """
 
     # iteration could be optimized dont bother
+    #iRow = 1
+    #iCol = 0
+    #for i, j in elData:
+    #    xlsxWorksheet.write(iRow, iCol, i)
+    #    xlsxWorksheet.set_column(iRow, iCol, 15)
+    #    xlsxWorksheet.write(iRow, iCol + 1, j)
+        #xlsxWorksheet.write(iRow, iCol + 2, k)
+    #    iRow += 1
+
     iRow = 1
     iCol = 0
-    for i, j, k in elData:
-        xlsxWorksheet.write(iRow, iCol, i)
-        xlsxWorksheet.set_column(iRow, iCol, 15)
-        xlsxWorksheet.write(iRow, iCol + 1, j)
-        xlsxWorksheet.write(iRow, iCol + 2, k)
+    for row in rowList:
+        xlsxWorksheet.write(iRow, iCol, row)
+        iRow += 1
+    iRow = 1
+    iCol = 1
+    for barcode in barcodeList:
+        xlsxWorksheet.write(iRow, iCol, barcode)
         iRow += 1
 
-    xlsxWorksheet.close()
+
+
+
+    xlsxWorkbook.close()
+
