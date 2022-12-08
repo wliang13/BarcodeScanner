@@ -4,6 +4,7 @@ from datetime import datetime
 from pyzbar.pyzbar import decode
 import cv2
 import winsound 
+from Excel_Exporter import exportExcelSheet
 
 
 
@@ -11,7 +12,9 @@ app = Flask(__name__) #Flask dependency
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
-barcodeList = []                        #list of decoded barcodes
+barcodeList = [] 
+rowList= []
+#dexport = []                       #list of decoded barcodes
 temp=0
 #camera = cv2.VideoCapture(0)
 cameraCaptureVar=0
@@ -50,9 +53,10 @@ def gen_frames():
             #the next line is for showing the barcode data that is being scanned on the video feed
             #cv2.putText(frame, obj.data, (x-20, y-20), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 2)
             
-            if obj.data not in barcodeList:
+            data = obj.data.decode("utf-8")
+            if data not in barcodeList:
                 #might not need list, might just need to add to database
-                barcodeList.append(obj.data)
+                barcodeList.append(data)
 
                 sFreqSuccess = 1000  # succes sound frequency
                 sDurSuccess = 500 # success sound duration
@@ -87,6 +91,7 @@ class Todo(db.Model):
 def index():
     if request.method == 'POST':
         row_number = request.form['content']
+        rowList.append(row_number)          ###############################
         new_row = Todo(content=row_number)
 
         try:
@@ -97,7 +102,7 @@ def index():
             return
     else:
         rows = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index.html', rows=rows, barcodeList=barcodeList)
+        return render_template('index2.html', rows=rows, barcodeList=barcodeList)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -138,12 +143,12 @@ def video_feed():
 
 
 #Myabe use this function for showing the barcode in index.html
-@app.route('/show_barcode')
-def show_barcode():
-    if temp == 0:
-        return render_template('barcodeDisplay.html', temp=temp)
-    else:
-        return render_template('barcodeDisplay.html', barcodeList=barcodeList, temp=temp)
+#@app.route('/show_barcode')
+#def show_barcode():
+#    if temp == 0:
+#        return render_template('barcodeDisplay.html', temp=temp)
+#    else:
+#        return render_template('barcodeDisplay.html', barcodeList=barcodeList, temp=temp)
 
 @app.route('/stop_camera')
 def stop_camera():
@@ -156,6 +161,15 @@ def start_camera():
     global cameraCaptureVar
     cameraCaptureVar = 0
     return render_template('videoPage.html')
+
+@app.route('/export')
+def export():
+    #dexport.append(barcodeList)
+    #dexport.append(rowList)
+    #print(dexport)
+    exportExcelSheet(rowList, barcodeList)
+    rows = Todo.query.order_by(Todo.date_created).all()
+    return render_template('index2.html', rows=rows, barcodeList=barcodeList)
 
 
 
