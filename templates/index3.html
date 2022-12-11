@@ -18,7 +18,29 @@
     <div class="content">
         <h1 style="text-align: left">Enter Row</h1>
         {% if rows|length < 1 %}
-            <h4 style="text-align: center"> There are no rows. Add row below.</h4>
+            <div>
+                <table style="float: left">
+                    <tr>
+                        <th>There are no rows. Add row below.</th>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><form action="/" method="POST" style="margin: 0 auto">
+                            <input type="text" name="content" style="padding: 5px">
+                            <input type="submit" value="Add Row" style="padding: 5px">
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <a href="/video_page" type="none">
+                                <button style="padding: 5px">Submit</button>
+                            </a>
+                            <a href="/export" type="none">
+                                <button style="padding: 5px">Export</button>
+                            </a>
+                        </td>
+                    </tr>
+            </div>
         {% else %}
 
             <div>
@@ -61,23 +83,23 @@
                     </tfoot>
                 </table>
         {% endif %}
+        {% if barcodeList|length >= 1 %}
+
                 <table style="float: left">
                     <tr>
                         <th>Barcodes</th>
                     </tr>
                     {% for barcode in barcodeList %}
+
                         <tr style="padding: 5px">
                             <td>{{ barcode }}</td>
                         </tr>
                     {% endfor %}
                 </table>
-            </div>
+        {% endif %}
+        </div>
     </div>    
 </body>
-
-<a href="/export" type="none">
-    &ensp;<button>export</button>
-</a>
 
     <!--<form action="/" method="POST" style="margin: 0 auto">
         &ensp;<input type="text" name="content">
