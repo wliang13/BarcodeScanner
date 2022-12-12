@@ -1,7 +1,7 @@
 import os         #added after tutorial
 from flask import Flask, render_template, request, redirect, Response, send_file
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import func         #added after tutorial, might not need
+#from sqlalchemy.sql import func         #added after tutorial, might not need
 from datetime import datetime
 from pyzbar.pyzbar import decode
 import cv2
@@ -83,9 +83,9 @@ def gen_frames():
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        row_number = request.form['content']
         factory_number = request.form['factory']
         building_number = request.form['building']
+        row_number = request.form['content']
         rowList.append(row_number)          ###############################
         new_row = Todo(factory=factory_number, building=building_number, barcode='Not Scanned Yet', content=row_number)
 
@@ -114,6 +114,8 @@ def delete(id):
 def update(id):
     row = Todo.query.get_or_404(id)
     if request.method == 'POST':
+        row.factory = request.form['factory']
+        row.building = request.form['building']
         row.content = request.form['content']
 
         try:

@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 
-{% block head %}
+<!--{% block head %}
 <title>Add Specific Row Number</title>
-{% endblock %}
+{% endblock %}-->
 
 {% block body %}
 <div class="content">
-    <h1 style="text-align: center">Update Row</h1>
+    <h1 style="text-align: center">Update Details</h1>
     <form action="/update/{{row.id}}" method="POST">
-        <input type="text" name="content" value="{{row.content}}">
-        <input type="submit" value="Update Row">
+        <input type="text" name="factory" value="{{row.factory}}", placeholder="Fac">
+        <input type="text" name="building" value="{{row.building}}", placeholder="Bldg">
+        <input type="text" name="content" value="{{row.content}}", placeholder="Row">
+        <input type="submit" value="Update">
     </form>
 </div>
 {% endblock %}
