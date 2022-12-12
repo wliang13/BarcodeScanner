@@ -47,18 +47,23 @@ def gen_frames():
             
             data = obj.data.decode("utf-8")
             with app.app_context():
-                update = Todo.query.filter_by(barcode='Not Scanned Yet').first()
-                if update==None:
-                    latest_entry = Todo.query.order_by(Todo.id.desc()).first()
-                    new_entry = Todo(factory=latest_entry.factory, building=latest_entry.building, content=latest_entry.content, barcode=data)
-                    db.session.add(new_entry)
-                    db.session.commit()
-                else:
-                    update.barcode = data
-                    db.session.commit()
-            sFreqSuccess = 1000  # succes sound frequency
-            sDurSuccess = 500 # success sound duration
-            winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
+                check = Todo.query.filter_by(barcode=data).first()
+                if check==None:
+                    update = Todo.query.filter_by(barcode='Not Scanned Yet').first()
+                    if update==None:
+                        latest_entry = Todo.query.order_by(Todo.id.desc()).first()
+                        if latest_entry==None:
+                            new_entry = Todo(factory=0, building=0, content=0, barcode=data)
+                        else:
+                            new_entry = Todo(factory=latest_entry.factory, building=latest_entry.building, content=latest_entry.content, barcode=data)
+                        db.session.add(new_entry)
+                        db.session.commit()
+                    else:
+                        update.barcode = data
+                        db.session.commit()
+                    sFreqSuccess = 1000  # succes sound frequency
+                    sDurSuccess = 500 # success sound duration
+                    winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
 
         if not success:
             break
