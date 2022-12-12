@@ -54,18 +54,21 @@ def gen_frames():
             #cv2.putText(frame, obj.data, (x-20, y-20), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 2)
             
             data = obj.data.decode("utf-8")
-            if data not in barcodeList:
-                #might not need list, might just need to add to database
-                barcodeList.append(data)
-                with app.app_context():
-                    update = Todo.query.filter_by(barcode='Not Scanned Yet').first()
+            with app.app_context():
+                update = Todo.query.filter_by(barcode='Not Scanned Yet').first()
+                if update==None:
+                    latest_entry = Todo.query.order_by(Todo.id.desc()).first()
+                    new_entry = Todo(factory=latest_entry.factory, building=latest_entry.building, content=latest_entry.content, barcode=data)
+                    db.session.add(new_entry)
+                    db.session.commit()
+                else:
                     update.barcode = data
                     db.session.commit()
-                sFreqSuccess = 1000  # succes sound frequency
-                sDurSuccess = 500 # success sound duration
-                winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
-                global temp         #for showing barcode in third page
-                temp = 1
+            sFreqSuccess = 1000  # succes sound frequency
+            sDurSuccess = 500 # success sound duration
+            winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
+            global temp         #for showing barcode in third page
+            temp = 1
             #    temp = obj.data  
             #    #yield obj.data  
             #    #print(temp)
