@@ -1,7 +1,6 @@
-import os         #added after tutorial
+import os         
 from flask import Flask, render_template, request, redirect, Response, send_file
 from flask_sqlalchemy import SQLAlchemy
-#from sqlalchemy.sql import func         #added after tutorial, might not need
 from datetime import datetime
 from pyzbar.pyzbar import decode
 import cv2
@@ -20,7 +19,7 @@ class Todo(db.Model):
     factory = db.Column(db.String(10), nullable=False)
     building = db.Column(db.String(10), nullable=False)
     row = db.Column(db.String(10), nullable=False)
-    barcode = db.Column(db.String(50), nullable=False)         #barcodes stored in database
+    barcode = db.Column(db.String(50), nullable=False)    
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -34,10 +33,12 @@ def gen_frames():
     else:
         return 0
     while True:
-        success, frame = camera.read()  # read the camera frame
+        # read the camera frame
+        success, frame = camera.read() 
         barcodes = decode(frame)
         for obj in barcodes:
-            (x, y, w, h) = obj.rect         #locating barcode in image
+            #locating barcode in image
+            (x, y, w, h) = obj.rect         
             #creating a rectangle around the barcode
             cv2.rectangle(frame, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
             string = "Barcode Scanned"
@@ -149,7 +150,6 @@ def export():
     rows = Todo.query.order_by(Todo.date_created).all()
     exportExcelSheet(rows)
     return render_template('index.html', rows=rows)
-
 
 
 if __name__ == "__main__":
