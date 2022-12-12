@@ -1,54 +1,96 @@
-{% extends 'base.html' %}
+<style>
+    table, th, td {
+        margin: 0 auto;
+        border: 1px solid #aaa;
+        border-collapse: collapse;
+        width: 600px;
+        text-align: center;
+    }
+    th {
+        height: 30px;
+    }
+    td {
+        padding: 5px;
+    }
+</style>
 
-{% block body %}
-<div class="content">
-    <h1 style="text-align: left">Enter Row</h1>
-    {% if rows|length < 1 %}
-    <h4 style="text-align: center"> There are no rows. Add row below.</h4>
-    {% else %}
+<body>
+    <div class="content">
+        <h1 style="text-align: center">Enter Location Details</h1>
+        {% if rows|length < 1 %}
+            <div>
+                <table>
+                    <tr>
+                        <th>Add location details below.</th>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><form action="/" method="POST" style="margin: 0 auto">
+                            <input type="text" name="factory" style="padding: 5px" size="4" placeholder="Fac">
+                            <input type="text" name="building" style="padding: 5px" size="4" placeholder="Bldg">
+                            <input type="text" name="row" style="padding: 5px" size="4" placeholder="Row">
+                            <input type="submit" value="Add Row" style="padding: 5px">
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <a href="/video_page" type="none">
+                                <button style="padding: 5px">Submit</button>
+                            </a>
+                        </td>
+                    </tr>
+            </div>
+        {% else %}
 
-    <div>
-        <table style="float: left">
-            <tr>
-                <th>Row</th>
-                <th>Added</th>
-                <th>Actions</th>
-                <!--<th>Barcodes</th>-->
-            </tr>
-            {% for row in rows %}
-                <tr>
-                    <td>{{ row.content }}</td>
-                    <td>{{ row.date_created.date() }}</td>
-                    <td>
-                        <a href="/delete/{{row.id}}">Delete</a>
-                        <br>
-                        <a href="/update/{{row.id}}">Update</a>
-                    </td>
-                    <!--<td>{{ row.barcode }}</td>-->
-                </tr>
-            {% endfor %}
-        </table>
+            <div>
+                <table>
+                    <tr>
+                        <th>Factory</th>
+                        <th>Building</th>
+                        <th>Row</th>
+                        <th>Added</th>
+                        <th>Actions</th>
+                        <th>Barcodes</th>
+                    </tr>
+                    {% for obj in rows %}
+                        <tr>
+                            <td>{{ obj.factory }}</td>
+                            <td>{{ obj.building }}</td>
+                            <td>{{ obj.row }}</td>
+                            <td>{{ obj.date_created.strftime('%m-%d-%Y %H:%M') }}</td>
+                            <td>
+                                <a href="/delete/{{obj.id}}">Delete</a>
+                                <br>
+                                <a href="/update/{{obj.id}}">Update</a>
+                            </td>
+                            <td>{{ obj.barcode }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <a href="/video_page" type="none">
+                                    <button style="padding: 5px">Submit</button>
+                                </a>
+                                <a href="/export" type="none">
+                                    <button style="padding: 5px">Export</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6"><form action="/" method="POST" style="margin: 0 auto">
+                                <input type="text" name="factory" style="padding: 5px" size="4" placeholder="Fac">
+                                <input type="text" name="building" style="padding: 5px" size="4" placeholder="Bldg">
+                                <input type="text" name="row" style="padding: 5px" size="4" placeholder="Row">
+                                <input type="submit" value="Add Row" style="padding: 5px">
+                                </form>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
         {% endif %}
-        <table style="float: left">
-            <tr>
-                <th>Barcodes</th>
-            </tr>
-            {% for barcode in barcodeList %}
-                <tr>
-                    <td>{{ barcode }}</td>
-                </tr>
-        </table>
-        {% endfor %}
-    </div>
-
-    <form action="/" method="POST">
-        <input type="text" name="content">
-        <input type="submit" value="Add Row">
-    </form>
-</div>
-
-<a href="/video_page">
-    <button>Submit</button>
-</a>
-
-{% endblock %}
+        </div>
+    </div>    
+</body>

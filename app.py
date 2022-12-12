@@ -19,7 +19,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     factory = db.Column(db.String(10), nullable=False)
     building = db.Column(db.String(10), nullable=False)
-    content = db.Column(db.String(10), nullable=False)
+    row = db.Column(db.String(10), nullable=False)
     barcode = db.Column(db.String(50), nullable=False)         #barcodes stored in database
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -53,9 +53,9 @@ def gen_frames():
                     if update==None:
                         latest_entry = Todo.query.order_by(Todo.id.desc()).first()
                         if latest_entry==None:
-                            new_entry = Todo(factory=0, building=0, content=0, barcode=data)
+                            new_entry = Todo(factory=0, building=0, row=0, barcode=data)
                         else:
-                            new_entry = Todo(factory=latest_entry.factory, building=latest_entry.building, content=latest_entry.content, barcode=data)
+                            new_entry = Todo(factory=latest_entry.factory, building=latest_entry.building, row=latest_entry.row, barcode=data)
                         db.session.add(new_entry)
                         db.session.commit()
                     else:
@@ -80,8 +80,8 @@ def index():
     if request.method == 'POST':
         factory_number = request.form['factory']
         building_number = request.form['building']
-        row_number = request.form['content']
-        new_row = Todo(factory=factory_number, building=building_number, barcode='Not Scanned Yet', content=row_number)
+        row_number = request.form['row']
+        new_row = Todo(factory=factory_number, building=building_number, barcode='Not Scanned Yet', row=row_number)
 
         try:
             db.session.add(new_row)
@@ -91,7 +91,7 @@ def index():
             return
     else:
         rows = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index2.html', rows=rows)
+        return render_template('index.html', rows=rows)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -106,11 +106,11 @@ def delete(id):
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
-    row = Todo.query.get_or_404(id)
+    row_selected = Todo.query.get_or_404(id)
     if request.method == 'POST':
-        row.factory = request.form['factory']
-        row.building = request.form['building']
-        row.content = request.form['content']
+        row_selected.factory = request.form['factory']
+        row_selected.building = request.form['building']
+        row_selected.row = request.form['row']
 
         try:
             db.session.commit()
@@ -118,7 +118,7 @@ def update(id):
         except:
             return 
     else:
-        return render_template('update.html', row=row)
+        return render_template('update.html', row_selected=row_selected)
 
 @app.route('/video_page')
 def video_page():
@@ -148,7 +148,7 @@ def start_camera():
 def export():
     rows = Todo.query.order_by(Todo.date_created).all()
     exportExcelSheet(rows)
-    return render_template('index2.html', rows=rows)
+    return render_template('index.html', rows=rows)
 
 
 
