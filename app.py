@@ -1,16 +1,33 @@
+import os         #added after tutorial
 from flask import Flask, render_template, request, redirect, Response, send_file
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func         #added after tutorial, might not need
 from datetime import datetime
 from pyzbar.pyzbar import decode
 import cv2
 import winsound 
 from Excel_Exporter import exportExcelSheet
 
-
-
-app = Flask(__name__) #Flask dependency
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+basedir = os.path.abspath(os.path.dirname(__file__))
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+    'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+
+
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    factory = db.Column(db.String(10), nullable=False)
+    building = db.Column(db.String(10), nullable=False)
+    content = db.Column(db.String(10), nullable=False)
+    barcode = db.Column(db.String(50), nullable=False)         #barcodes stored in database
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Row %r>' % self.id
+
 
 barcodeList = [] 
 rowList= []
@@ -77,22 +94,14 @@ def gen_frames():
     camera.release()
         
 
-
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
-    #barcode = db.Column(db.string(200))         #barcodes stored in database
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Row %r>' % self.id
-
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         row_number = request.form['content']
+        factory_number = request.form['factory']
+        building_number = request.form['building']
         rowList.append(row_number)          ###############################
-        new_row = Todo(content=row_number)
+        new_row = Todo(factory=factory_number, building=building_number, barcode='Not Scanned Yet', content=row_number)
 
         try:
             db.session.add(new_row)
@@ -164,9 +173,6 @@ def start_camera():
 
 @app.route('/export')
 def export():
-    #dexport.append(barcodeList)
-    #dexport.append(rowList)
-    #print(dexport)
     exportExcelSheet(rowList, barcodeList)
     rows = Todo.query.order_by(Todo.date_created).all()
     return render_template('index3.html', rows=rows, barcodeList=barcodeList)
@@ -175,3 +181,5 @@ def export():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
