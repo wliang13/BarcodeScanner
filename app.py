@@ -36,23 +36,6 @@ temp=0
 #camera = cv2.VideoCapture(0)
 cameraCaptureVar=0
 
-"""
-def barcodeDecoder(image):
-    barcodes = decode(image)            #decode function from pyzbar that decodes barcodes
-    for obj in barcodes:
-        (x, y, w, h) = obj.rect         #locating barcode in image
-        #creating a rectangle around the barcode
-        cv2.rectangle(image, (x-10, y-10), (x+(w+10), y+(h+10)), (255, 0, 0), 2)
-
-        #adding barcode values to the list
-        if obj.data not in barcodeList:
-            #might no need list, might just need to add to database
-            barcodeList.append(obj.data)
-            temp = obj.data    
-            #print(temp)
-            
-"""
-
 def gen_frames():  
     if cameraCaptureVar == 0:
         camera = cv2.VideoCapture(0)
@@ -74,7 +57,10 @@ def gen_frames():
             if data not in barcodeList:
                 #might not need list, might just need to add to database
                 barcodeList.append(data)
-
+                with app.app_context():
+                    update = Todo.query.filter_by(barcode='Not Scanned Yet').first()
+                    update.barcode = data
+                    db.session.commit()
                 sFreqSuccess = 1000  # succes sound frequency
                 sDurSuccess = 500 # success sound duration
                 winsound.Beep(sFreqSuccess,sDurSuccess)   #Play audio Que
@@ -111,7 +97,7 @@ def index():
             return
     else:
         rows = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index3.html', rows=rows, barcodeList=barcodeList)
+        return render_template('index2.html', rows=rows, barcodeList=barcodeList)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -175,7 +161,7 @@ def start_camera():
 def export():
     exportExcelSheet(rowList, barcodeList)
     rows = Todo.query.order_by(Todo.date_created).all()
-    return render_template('index3.html', rows=rows, barcodeList=barcodeList)
+    return render_template('index2.html', rows=rows, barcodeList=barcodeList)
 
 
 
