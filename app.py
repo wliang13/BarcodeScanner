@@ -129,7 +129,7 @@ def video_page():
 def video_feed():
     if cameraCaptureVar==1:
         filename = 'novideo.jpg'
-        return  send_file(filename, mimetype='image/jpg')
+        return send_file(filename, mimetype='image/jpg')
     else:
         return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
