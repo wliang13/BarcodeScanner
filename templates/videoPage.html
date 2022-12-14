@@ -1,48 +1,37 @@
-</div>-->
-<!--<style>
-    h3{
-        margin-left: 275px;
+<style>
+.img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%
+}
+.center {
+    text-align: center;
+    padding: 10px
+}
 
-    }
-    button{
-        margin-left: 50px;
-        padding: 15px, 32px;
-        font-size: 20px;
-        margin:4px 30px;
-    }
-    .center {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 40%;
-    }
-    .divcenter {
-        margin: auto;
-        width: 60%;
-    }
-</style>-->
+</style>
 
 <body>
-    <div class="container">
+    <div>
         <div class="row">
             <div class="col-lg-8  offset-lg-2">
-                <h3 class="mt-5">Live Streaming</h3>            <!--style="text-align: center"-->
-                <img src="{{ url_for('video_feed') }}" class="center", width="50%">
+                <h3 class="mt-5" style="text-align: center">Live Streaming</h3>            <!--style="text-align: center"-->
+                <img src="{{ url_for('video_feed') }}" class="img">
             </div>
         </div>
     </div>
 </body>
 
-<div class=".divcenter">
+<div class="center">
     <a href="/start_camera">
-        <button style="color:green">Start camera</button>
+        <button style="padding: 5px; color: green">Start camera</button>
     </a>
-
     <a href="/stop_camera">
-        <button style="color:red">Stop camera</button>
+        <button style="color:red; padding: 5px">Stop camera</button>
     </a>
     <a href="/">
-        <button style="color:blue">Back</button>
+        <button style="padding: 5px">Back</button>
     </a>
 </div>
 
