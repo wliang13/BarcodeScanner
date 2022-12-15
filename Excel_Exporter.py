@@ -35,7 +35,7 @@ def exportExcelSheet(entries):
     for entry in entries:
         xlsxWorksheet.write(iRow, iCol, entry.factory)
         xlsxWorksheet.write(iRow, iCol+1, entry.building)
-        xlsxWorksheet.write(iRow, iCol+2, entry.content)
+        xlsxWorksheet.write(iRow, iCol+2, entry.row)
         xlsxWorksheet.write(iRow, iCol+3, entry.date_created, date_format)
         xlsxWorksheet.write(iRow, iCol+4, entry.barcode)
         iRow += 1
